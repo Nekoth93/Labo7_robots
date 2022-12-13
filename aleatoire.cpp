@@ -1,9 +1,18 @@
-//
-// Created by P51 on 13.12.2022.
-//
+/*
+  ---------------------------------------------------------------------------
+  Fichier     : aleatoire.cpp
+  Nom du labo : Labo7 - Robots
+  Auteur(s)   : Delétraz Alexandre - Germano Hugo
+  Date        : 13.12.2022
+  But         : Définition de la fonction aleatoireEntreDeuxEntiers.
+
+  Remarque(s) : à compléter
+
+  Compilateur : gcc version 11.2.0
+  ---------------------------------------------------------------------------
+*/
 
 #include <random>
-
 #include "aleatoire.hpp"
 
 using namespace std;

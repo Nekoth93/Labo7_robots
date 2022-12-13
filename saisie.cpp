@@ -1,6 +1,17 @@
-//
-// Created by P51 on 13.12.2022.
-//
+/*
+  ---------------------------------------------------------------------------
+  Fichier     : saisie.cpp
+  Nom du labo : Labo7 - Robots
+  Auteur(s)   : Delétraz Alexandre - Germano Hugo
+  Date        : 13.12.2022
+  But         : Définition des fonctions nécessaires à la saisie sécurisée d'un
+                entier.
+
+  Remarque(s) : à compléter
+
+  Compilateur : gcc version 11.2.0
+  ---------------------------------------------------------------------------
+*/
 
 #include <iostream>
 #include <limits>
