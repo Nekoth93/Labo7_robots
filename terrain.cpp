@@ -3,3 +3,15 @@
 //
 
 #include "terrain.hpp"
+
+void Terrain::simulerCombat() {
+
+}
+
+void Terrain::afficherTerrain() {
+
+}
+
+void Terrain::initialiserRobot() {
+
+}
