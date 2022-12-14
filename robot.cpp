@@ -17,3 +17,11 @@
 void Robot::deplacer() {
 
 }
+
+unsigned Robot::getPosX() const {
+   return posX;
+}
+
+unsigned Robot::getPosY() const {
+   return posY;
+}

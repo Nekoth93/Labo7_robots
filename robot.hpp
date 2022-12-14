@@ -21,6 +21,8 @@ public:
    Robot(unsigned x, unsigned y,  const unsigned identifiant) : posX(x), posY(y), id(identifiant) {}
 
    void deplacer();
+   unsigned getPosX() const;
+   unsigned getPosY() const;
 
 private:
    unsigned posX;
