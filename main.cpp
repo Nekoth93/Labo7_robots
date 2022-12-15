@@ -61,8 +61,9 @@ int main() {
 
    Terrain t1((unsigned)saisirIntervaleInt(MIN_TERRAIN, MAX_TERRAIN,
                                          msgLargeurTerrain, msgErrTaille),
-           (unsigned)saisirIntervaleInt(MIN_TERRAIN, MAX_TERRAIN, msgLongeurTerrain, msgErrTaille),
-           (unsigned)saisirIntervaleInt(MIN_ROBOT, MAX_ROBOT, msgSaisieRobot, msgErrRobot));
+              (unsigned)saisirIntervaleInt(MIN_TERRAIN, MAX_TERRAIN, msgLongeurTerrain,
+                                          msgErrTaille),
+              (unsigned)saisirIntervaleInt(MIN_ROBOT, MAX_ROBOT, msgSaisieRobot, msgErrRobot));
 
    t1.afficherTerrain();
 
