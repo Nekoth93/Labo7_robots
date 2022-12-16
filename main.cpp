@@ -38,14 +38,16 @@ int main() {
                                     "Elle doit etre comprise entre "s +
                                     to_string(MIN_TERRAIN) +
                                     " et "s +
-                                    to_string(MAX_TERRAIN);
+                                    to_string(MAX_TERRAIN)
+                                    +" : "s;
    const string msgLongeurTerrain = "Veuillez choisir la longeur du terrain de "
                                     "combat"
                                     ".\n"s +
                                     "Elle doit etre comprise entre "s +
                                     to_string(MIN_TERRAIN) +
                                     " et "s +
-                                    to_string(MAX_TERRAIN);
+                                    to_string(MAX_TERRAIN)
+                                    +" : "s;
    const string msgErrTaille      = "Taille invalide, veuillez recommencer"s;
 
 
@@ -53,7 +55,9 @@ int main() {
                                  "Ce nombre doit etre compris entre "s +
                                  to_string(MIN_ROBOT) +
                                  " et "s +
-                                 to_string(MAX_ROBOT);
+                                 to_string(MAX_ROBOT)
+                                  +" : "s;
+                                 
    const string msgErrRobot    = "Valeur invalide, veuillez recommencer"s;
 
    //======================== Début du programme ===================================
