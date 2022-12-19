@@ -45,6 +45,7 @@ private:
    void eliminerRobot(unsigned x, unsigned y, unsigned id);
    void constructionTerrain();
    void mettreAJour();
+   unsigned combatRobots();
 
 };
 

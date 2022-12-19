@@ -52,18 +52,12 @@ void Terrain::eliminerRobot(unsigned x, unsigned y, unsigned id){
    }
 
 }
-
-void Terrain::simulerCombat() {
-
+unsigned Terrain::combatRobots(){
    enum direction{UP, DOWN, RIGHT, LEFT };
 
-   constructionTerrain();
+   //random_shuffle(robots.begin(), robots.end());
 
-
-   unsigned nbrDeRobot;
-
-   do{
-      //random_shuffle(robots.begin(), robots.end());
+      unsigned nbrDeRobots = 0;
 
       for(vector<Robot>::iterator it = robots.begin(); it != robots.end(); ++it) {
 
@@ -71,7 +65,8 @@ void Terrain::simulerCombat() {
          unsigned y;
 
 
-         do{
+         if((*it).getEstEnVie()){
+            do{
             
             switch(aleatoireEntreDeuxEntiersPositifs(0,3)){
                case direction::UP :
@@ -91,25 +86,34 @@ void Terrain::simulerCombat() {
                   y =   (*it).getPosY();
             }
 
-         }while(peutSeDeplacer(x,y));
+            }while(peutSeDeplacer(x,y));
 
-         if(existeDeja(x, y)){
-            eliminerRobot(x,y, (*it).getId());
+            if(existeDeja(x, y)){
+               eliminerRobot(x,y, (*it).getId());
+            }
+            (*it).deplacer(x,y);
+            ++nbrDeRobots;
          }
-
-         (*it).deplacer(x,y);
-
+         
       }
+
+      return nbrDeRobots;
+
+}
+void Terrain::simulerCombat() {
+
+   
+
+   constructionTerrain();
+
+   unsigned nbrDeRobots;
+
+   do{
+      
+      nbrDeRobots = combatRobots();
       afficherTerrain();
-      nbrDeRobot = 0;
-      for(vector<Robot>::const_iterator it = robots.cbegin(); it != robots.cend(); ++it) {
-         Robot monRobot = *it;
 
-         if(monRobot.getEstEnVie()){
-            ++nbrDeRobot;
-         }
-      }
-   }while(nbrDeRobot != 1);
+   }while(nbrDeRobots != 1);
 
 }
 
