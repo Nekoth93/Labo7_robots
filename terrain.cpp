@@ -12,6 +12,7 @@
   ---------------------------------------------------------------------------
 */
 
+#include <random>
 #include <vector>
 #include <string>
 #include <iostream>
@@ -25,32 +26,33 @@ using namespace std;
 
 const char VIDE     = ' ';
 
-bool Terrain::peutSeDeplacer(unsigned x, unsigned y){
+bool Terrain::peutSeDeplacer(unsigned x, unsigned y) const {
    
-   if(x > largeur || y > longeur || x == 0 || y == 0){
+   if(x > largeur || y > longeur || x == 0 || y == 0) {
       return true;
    }
    return false;
 }
-void Terrain::eliminerRobot(unsigned x, unsigned y, unsigned id){
-   
-   for(vector<Robot>::iterator it = robots.begin(); it != robots.end(); ++it) {
-      if((*it).getPosX() == x && (*it).getPosY() == y && (*it).getEstEnVie()){
+void Terrain::eliminerRobot(unsigned x, unsigned y, unsigned id) {
 
-         (*it).tuer();
+//   for(vector<Robot>::iterator it = robots.begin(); it != robots.end(); ++it)
+   for(Robot& robot : robots) {
+      if(robot.getPosX() == x && robot.getPosY() == y && robot.getEstEnVie()) {
 
-         robotTue += "Robot " + to_string(id) + " a tué robot " + to_string((*it).getId()) + "\n";
+         robot.tuer();
+
+         robotTue += "Robot "s + to_string(id) + " a tué robot "s + to_string(robot
+            .getId()) + "\n";
 
       }
    }
 
 }
 
-void Terrain::deplacerRobot(unsigned& x, unsigned& y, Robot& monRobot){
-
+void Terrain::deplacerRobot(unsigned& x, unsigned& y, Robot& monRobot) {
 
    enum direction{UP, DOWN, RIGHT, LEFT };
-   do{
+   do {
             
             switch(aleatoireEntreDeuxEntiersPositifs(0,3)){
                case direction::UP :
@@ -79,19 +81,21 @@ void Terrain::deplacerRobot(unsigned& x, unsigned& y, Robot& monRobot){
 }
 unsigned Terrain::combatRobots(){
 
-   //random_shuffle(robots.begin(), robots.end());
+   random_shuffle(robots.begin(), robots.end());
+   //random_shuffle trop vieux. Il faudrait utiliser le shuffle ci-dessous.
+   //shuffle(robots.begin(), robots.end(), std::mt19937(std::random_device()()));
 
       unsigned nbrDeRobots = 0;
 
-      for(vector<Robot>::iterator it = robots.begin(); it != robots.end(); ++it) {
+//   for(vector<Robot>::iterator it = robots.begin(); it != robots.end(); ++it)
+      for(Robot& robot : robots) {
 
          unsigned x;
          unsigned y;
 
-
-         if((*it).getEstEnVie()){
+         if(robot.getEstEnVie()){
             
-            deplacerRobot(x, y, (*it));
+            deplacerRobot(x, y, robot);
 
             ++nbrDeRobots;
          }
@@ -112,7 +116,7 @@ void Terrain::simulerCombat() {
       nbrDeRobots = combatRobots();
       afficherTerrain();
 
-   }while(nbrDeRobots != 1);
+   }while(nbrDeRobots != 1 && nbrDeRobots > 0);
 
 }
 
@@ -142,7 +146,7 @@ void Terrain::constructionTerrain(){
 
    terrain.push_back(haut_bas);
 
-   for(int i = 0; i < longeur; ++i){
+   for(unsigned i = 0; i < longeur; ++i){
       terrain.push_back(milieu);
    }
    terrain.push_back(haut_bas);
@@ -152,13 +156,11 @@ void Terrain::constructionTerrain(){
 void Terrain::mettreAJour(){
    const string ESPACE_LIBRE (largeur, VIDE);
 
-   for(int i = 1 ; i <= longeur; ++i){
+   for(unsigned i = 1 ; i <= longeur; ++i){
       terrain.at(i).replace(1, largeur , ESPACE_LIBRE);
    }
-
-   for(vector<Robot>::const_iterator it = robots.cbegin(); it != robots.cend(); ++it) {
-      Robot monRobot = *it;
-
+//   for(vector<Robot>::const_iterator it = robots.cbegin(); it != robots.cend(); ++it)
+   for(Robot monRobot : robots) {
       if(monRobot.getEstEnVie()){
          terrain.at(monRobot.getPosY()).replace(monRobot.getPosX(), 1, to_string(monRobot.getId()));
       }
@@ -166,13 +168,18 @@ void Terrain::mettreAJour(){
 }
 
 void Terrain::afficherTerrain() {
-
-   system("clear");
+   #if defined(__linux__)  // Or #if __linux__
+      system("clear");
+   #elif _WIN32
+      system("CLS");
+   #else
+      system("clear");
+   #endif
 
    mettreAJour();
-
-   for(vector<string>::const_iterator it = terrain.cbegin() ; it != terrain.cend(); ++it){
-      cout << *it;
+//   for(vector<string>::const_iterator it = terrain.cbegin() ; it != terrain.cend(); ++it)
+   for(const string& it : terrain){
+      cout << it;
    }
 
    cout << robotTue;
@@ -204,10 +211,8 @@ unsigned Terrain::getLongeur() const {
 }
 // à revoir en foncteur (selon indication du prof)
 bool Terrain::existeDeja( unsigned x, unsigned y) {
-
-   for(vector<Robot>::const_iterator it = robots.cbegin(); it != robots.cend(); ++it) {
-      Robot monRobot = *it;
-
+//   for(vector<Robot>::const_iterator it = robots.cbegin(); it != robots.cend(); ++it)
+   for(Robot monRobot : robots) {
       if(monRobot.getPosX() == x and monRobot.getPosY() == y) {
          return true;
       }

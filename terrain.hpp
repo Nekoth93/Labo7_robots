@@ -43,7 +43,7 @@ private:
    unsigned getLongeur() const;
    void initialiserRobot();
    bool existeDeja(unsigned x, unsigned y);
-   bool peutSeDeplacer(unsigned x, unsigned y);
+   bool peutSeDeplacer(unsigned x, unsigned y) const;
    void eliminerRobot(unsigned x, unsigned y, unsigned id);
    void constructionTerrain();
    void mettreAJour();

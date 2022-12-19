@@ -18,6 +18,8 @@
 
 #include <string>
 
+void viderBuffer();
+
 int saisirIntervaleInt(int minInt, int maxInt, const std::string& message,
                        const std::string& message_erreur);
 

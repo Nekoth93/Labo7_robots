@@ -35,6 +35,15 @@ void Robot::tuer(){
    estEnVie = false;
 }
 
-bool Robot::getEstEnVie(){
+bool Robot::getEstEnVie() const{
    return estEnVie;
+}
+
+// pas convaincu de ça...
+Robot& Robot::operator=(const Robot &r)  {
+   Robot temp(0, 0, 10, true);
+   temp.posX = r.posX;
+   temp.posY = r.posY;
+
+   return *this;
 }

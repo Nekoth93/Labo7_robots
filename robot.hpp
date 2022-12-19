@@ -20,12 +20,13 @@ class Robot {
 public:
 
    Robot(unsigned x, unsigned y,  const unsigned identifiant, bool vivant) : posX(x), posY(y), id(identifiant) , estEnVie(vivant){}
+   Robot& operator=(const Robot& r);
 
    void deplacer(unsigned x, unsigned y);
    unsigned getPosX() const;
    unsigned getPosY() const;
    unsigned getId() const;
-   bool getEstEnVie();
+   bool getEstEnVie() const;
    void tuer();
 
 private:
