@@ -16,6 +16,7 @@
 #define LABO7_ROBOTS_TERRAIN_HPP
 
 #include <vector>
+#include <string>
 #include "robot.hpp"
 
 
@@ -24,9 +25,7 @@ public:
    Terrain() : Terrain(20, 20, 6) {}
    Terrain(unsigned la, unsigned lo, unsigned nbrRobot) : largeur(la), longeur(lo),
            nombreRobots(nbrRobot) { initialiserRobot();}
-   unsigned getlargeur() const;
-   unsigned getLongeur() const;
-   void afficherTerrain();
+   
    void simulerCombat();
 
 
@@ -34,9 +33,18 @@ private:
    unsigned largeur;
    unsigned longeur;
    unsigned nombreRobots;
+   std::vector<Robot> robots;
 
-   std::vector<Robot> initialiserRobot();
-   static bool existeDeja(const std::vector<Robot>& robots, unsigned x, unsigned y);
+
+   void afficherTerrain();
+   unsigned getlargeur() const;
+   unsigned getLongeur() const;
+   void initialiserRobot();
+   bool existeDeja(unsigned x, unsigned y);
+   bool peutSeDeplacer(unsigned x, unsigned y);
+   void eliminerRobot(unsigned x, unsigned y, unsigned id);
+   void constructionTerrain();
+   void mettreAJour();
 
 };
 

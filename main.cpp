@@ -69,7 +69,7 @@ int main() {
                                           msgErrTaille),
               (unsigned)saisirIntervaleInt(MIN_ROBOT, MAX_ROBOT, msgSaisieRobot, msgErrRobot));
 
-   t1.afficherTerrain();
+   t1.simulerCombat();
 
    return EXIT_SUCCESS;
 }
