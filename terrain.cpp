@@ -23,14 +23,7 @@
 
 using namespace std;
 
-
-const char MUR_HAUT = '-';
-const char MUR_COTE = '|';
 const char VIDE     = ' ';
-
-vector<std::string> terrain;
-
-string robotTue;
 
 bool Terrain::peutSeDeplacer(unsigned x, unsigned y){
    
@@ -52,8 +45,39 @@ void Terrain::eliminerRobot(unsigned x, unsigned y, unsigned id){
    }
 
 }
-unsigned Terrain::combatRobots(){
+
+void Terrain::deplacerRobot(unsigned& x, unsigned& y, Robot& monRobot){
+
+
    enum direction{UP, DOWN, RIGHT, LEFT };
+   do{
+            
+            switch(aleatoireEntreDeuxEntiersPositifs(0,3)){
+               case direction::UP :
+                  x =   monRobot.getPosX();
+                  y =   monRobot.getPosY()+1;
+                  break;
+               case direction::DOWN :
+                  x =   monRobot.getPosX();
+                  y =   monRobot.getPosY()-1;
+                  break;
+               case direction::RIGHT :
+                  x =   monRobot.getPosX()+1;
+                  y =   monRobot.getPosY();
+                  break;
+               case direction::LEFT :
+                  x =   monRobot.getPosX()-1;
+                  y =   monRobot.getPosY();
+            }
+
+   }while(peutSeDeplacer(x,y));
+
+   if(existeDeja(x, y)){
+      eliminerRobot(x,y, monRobot.getId());
+   }
+   monRobot.deplacer(x,y);
+}
+unsigned Terrain::combatRobots(){
 
    //random_shuffle(robots.begin(), robots.end());
 
@@ -66,32 +90,9 @@ unsigned Terrain::combatRobots(){
 
 
          if((*it).getEstEnVie()){
-            do{
             
-            switch(aleatoireEntreDeuxEntiersPositifs(0,3)){
-               case direction::UP :
-                  x =   (*it).getPosX();
-                  y =   (*it).getPosY()+1;
-                  break;
-               case direction::DOWN :
-                  x =   (*it).getPosX();
-                  y =   (*it).getPosY()-1;
-                  break;
-               case direction::RIGHT :
-                  x =   (*it).getPosX()+1;
-                  y =   (*it).getPosY();
-                  break;
-               case direction::LEFT :
-                  x =   (*it).getPosX()-1;
-                  y =   (*it).getPosY();
-            }
+            deplacerRobot(x, y, (*it));
 
-            }while(peutSeDeplacer(x,y));
-
-            if(existeDeja(x, y)){
-               eliminerRobot(x,y, (*it).getId());
-            }
-            (*it).deplacer(x,y);
             ++nbrDeRobots;
          }
          
@@ -101,8 +102,6 @@ unsigned Terrain::combatRobots(){
 
 }
 void Terrain::simulerCombat() {
-
-   
 
    constructionTerrain();
 
@@ -122,6 +121,11 @@ void Terrain::constructionTerrain(){
    // + 2, car on souhaite un terrain qui soit effectivement d'une largeur de 20, or
    // les murs prennent chacun une place.
    // Pour la longueur, nous faisons que +1, parce qu'on commence la boucle à 1.
+
+
+   const char MUR_HAUT = '-';
+   const char MUR_COTE = '|';
+
    const unsigned largeurTerrainAffichee = largeur + 2;
    const unsigned longeurTerrainAffichee = longeur + 1;
    terrain.reserve(longeurTerrainAffichee);

@@ -34,6 +34,8 @@ private:
    unsigned longeur;
    unsigned nombreRobots;
    std::vector<Robot> robots;
+   std::vector<std::string> terrain;
+   std::string robotTue;
 
 
    void afficherTerrain();
@@ -46,6 +48,7 @@ private:
    void constructionTerrain();
    void mettreAJour();
    unsigned combatRobots();
+   void deplacerRobot(unsigned& x, unsigned& y, Robot& monRobot);
 
 };
 
