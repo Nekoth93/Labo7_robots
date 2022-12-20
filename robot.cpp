@@ -41,7 +41,7 @@ bool Robot::getEstEnVie() const{
 
 // pas convaincu de ça...
 Robot& Robot::operator=(const Robot &r)  {
-   Robot temp(0, 0, 10, true);
+   Robot temp(0, 0, r.getId(), true);
    temp.posX = r.posX;
    temp.posY = r.posY;
 

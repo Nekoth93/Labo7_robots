@@ -24,7 +24,7 @@
 
 using namespace std;
 
-const char VIDE     = ' ';
+const char VIDE = ' ';
 
 bool Terrain::peutSeDeplacer(unsigned x, unsigned y) const {
    
@@ -33,9 +33,9 @@ bool Terrain::peutSeDeplacer(unsigned x, unsigned y) const {
    }
    return false;
 }
+
 void Terrain::eliminerRobot(unsigned x, unsigned y, unsigned id) {
 
-//   for(vector<Robot>::iterator it = robots.begin(); it != robots.end(); ++it)
    for(Robot& robot : robots) {
       if(robot.getPosX() == x && robot.getPosY() == y && robot.getEstEnVie()) {
 
@@ -51,7 +51,7 @@ void Terrain::eliminerRobot(unsigned x, unsigned y, unsigned id) {
 
 void Terrain::deplacerRobot(unsigned& x, unsigned& y, Robot& monRobot) {
 
-   enum direction{UP, DOWN, RIGHT, LEFT };
+   enum direction{ UP, DOWN, RIGHT, LEFT };
    do {
             
             switch(aleatoireEntreDeuxEntiersPositifs(0,3)){
@@ -74,26 +74,26 @@ void Terrain::deplacerRobot(unsigned& x, unsigned& y, Robot& monRobot) {
 
    }while(peutSeDeplacer(x,y));
 
-   if(existeDeja(x, y)){
+   if(existeDeja(x, y)) {
       eliminerRobot(x,y, monRobot.getId());
    }
    monRobot.deplacer(x,y);
 }
-unsigned Terrain::combatRobots(){
+unsigned Terrain::combatRobots() {
 
-   random_shuffle(robots.begin(), robots.end());
-   //random_shuffle trop vieux. Il faudrait utiliser le shuffle ci-dessous.
-   //shuffle(robots.begin(), robots.end(), std::mt19937(std::random_device()()));
+
+   // Le générateur aléatoire ci-dessous est celui que notre IDE nous à suggérer.
+   // Il est possible d'en choisir un autre si on en préfère un en particulier.
+   shuffle(robots.begin(), robots.end(), std::mt19937(std::random_device()()));
 
       unsigned nbrDeRobots = 0;
 
-//   for(vector<Robot>::iterator it = robots.begin(); it != robots.end(); ++it)
       for(Robot& robot : robots) {
 
          unsigned x;
          unsigned y;
 
-         if(robot.getEstEnVie()){
+         if(robot.getEstEnVie()) {
             
             deplacerRobot(x, y, robot);
 
@@ -120,7 +120,7 @@ void Terrain::simulerCombat() {
 
 }
 
-void Terrain::constructionTerrain(){
+void Terrain::constructionTerrain() {
 
    // + 2, car on souhaite un terrain qui soit effectivement d'une largeur de 20, or
    // les murs prennent chacun une place.
@@ -146,22 +146,22 @@ void Terrain::constructionTerrain(){
 
    terrain.push_back(haut_bas);
 
-   for(unsigned i = 0; i < longeur; ++i){
+   for(unsigned i = 0; i < longeur; ++i) {
       terrain.push_back(milieu);
    }
    terrain.push_back(haut_bas);
 
 }
 
-void Terrain::mettreAJour(){
+void Terrain::mettreAJour() {
    const string ESPACE_LIBRE (largeur, VIDE);
 
-   for(unsigned i = 1 ; i <= longeur; ++i){
+   for(unsigned i = 1 ; i <= longeur; ++i) {
       terrain.at(i).replace(1, largeur , ESPACE_LIBRE);
    }
-//   for(vector<Robot>::const_iterator it = robots.cbegin(); it != robots.cend(); ++it)
+
    for(Robot monRobot : robots) {
-      if(monRobot.getEstEnVie()){
+      if(monRobot.getEstEnVie()) {
          terrain.at(monRobot.getPosY()).replace(monRobot.getPosX(), 1, to_string(monRobot.getId()));
       }
    }
@@ -177,8 +177,7 @@ void Terrain::afficherTerrain() {
    #endif
 
    mettreAJour();
-//   for(vector<string>::const_iterator it = terrain.cbegin() ; it != terrain.cend(); ++it)
-   for(const string& it : terrain){
+   for(const string& it : terrain) {
       cout << it;
    }
 
@@ -209,9 +208,8 @@ unsigned Terrain::getlargeur() const {
 unsigned Terrain::getLongeur() const {
    return longeur;
 }
-// à revoir en foncteur (selon indication du prof)
+
 bool Terrain::existeDeja( unsigned x, unsigned y) {
-//   for(vector<Robot>::const_iterator it = robots.cbegin(); it != robots.cend(); ++it)
    for(Robot monRobot : robots) {
       if(monRobot.getPosX() == x and monRobot.getPosY() == y) {
          return true;

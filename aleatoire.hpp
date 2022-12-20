@@ -14,6 +14,14 @@
 #ifndef LABO7_ROBOTS_ALEATOIRE_HPP
 #define LABO7_ROBOTS_ALEATOIRE_HPP
 
+// nom         aleatoireEntreDeuxEntiersPositifs
+// but         Génerer un nombre aléatoire dans l'intervalle entre deux entiers positif
+//             reçu en paramètre.
+//
+// param       min : un entier non signé. Borne inférieur de l'intervalle.
+// param       max : un entier non signé. Borne supérieur de l'intervalle.
+// return      un entier non signé aléatoire.
+// exception   n/a
 unsigned aleatoireEntreDeuxEntiersPositifs(unsigned min, unsigned max);
 
 #endif //LABO7_ROBOTS_ALEATOIRE_HPP
