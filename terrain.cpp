@@ -18,13 +18,20 @@
 #include <iostream>
 #include <algorithm>
 #include <thread>
+#include <iomanip>
 #include "terrain.hpp"
 #include "saisie.hpp"
 #include "aleatoire.hpp"
 
 using namespace std;
 
-const char VIDE     = ' ';
+/// @brief vérifie si la première valeur d'un tableaux est plus grande que l'autre
+/// @param a premier tableau
+/// @param b second tableau
+/// @return si une est plus grande que l'autre
+bool trierIntVector(vector<unsigned> a, vector<unsigned> b){
+   return (a.at(0) < b.at(0));
+}
 
 bool Terrain::peutSeDeplacer(unsigned x, unsigned y) const {
    
@@ -35,21 +42,23 @@ bool Terrain::peutSeDeplacer(unsigned x, unsigned y) const {
 }
 void Terrain::eliminerRobot(unsigned x, unsigned y, unsigned id) {
 
-//   for(vector<Robot>::iterator it = robots.begin(); it != robots.end(); ++it)
    for(Robot& robot : robots) {
       if(robot.getPosX() == x && robot.getPosY() == y && robot.getEstEnVie()) {
 
          robot.tuer();
 
-         robotTue += "Robot "s + to_string(id) + " a tué robot "s + to_string(robot
-            .getId()) + "\n";
+         robotTue += " -> Robot "s + to_string(id) + " a tué robot "s + to_string(robot.getId()) + "\n";
 
       }
    }
 
 }
 
-void Terrain::deplacerRobot(unsigned& x, unsigned& y, Robot& monRobot) {
+void Terrain::deplacerRobot(Robot& monRobot) {
+
+
+   unsigned x;
+   unsigned y;
 
    enum direction{UP, DOWN, RIGHT, LEFT };
    do {
@@ -82,20 +91,14 @@ void Terrain::deplacerRobot(unsigned& x, unsigned& y, Robot& monRobot) {
 unsigned Terrain::combatRobots(){
 
    random_shuffle(robots.begin(), robots.end());
-   //random_shuffle trop vieux. Il faudrait utiliser le shuffle ci-dessous.
-   //shuffle(robots.begin(), robots.end(), std::mt19937(std::random_device()()));
 
       unsigned nbrDeRobots = 0;
 
-//   for(vector<Robot>::iterator it = robots.begin(); it != robots.end(); ++it)
       for(Robot& robot : robots) {
-
-         unsigned x;
-         unsigned y;
 
          if(robot.getEstEnVie()){
             
-            deplacerRobot(x, y, robot);
+            deplacerRobot(robot);
 
             ++nbrDeRobots;
          }
@@ -107,65 +110,17 @@ unsigned Terrain::combatRobots(){
 }
 void Terrain::simulerCombat() {
 
-   constructionTerrain();
-
-   unsigned nbrDeRobots;
+   unsigned nbrDeRobotsVivants;
 
    do{
       
-      nbrDeRobots = combatRobots();
+      nbrDeRobotsVivants = combatRobots();
       afficherTerrain();
 
-   }while(nbrDeRobots != 1 && nbrDeRobots > 0);
+   }while(nbrDeRobotsVivants != 1 && nbrDeRobotsVivants > 0);
 
 }
 
-void Terrain::constructionTerrain(){
-
-   // + 2, car on souhaite un terrain qui soit effectivement d'une largeur de 20, or
-   // les murs prennent chacun une place.
-   // Pour la longueur, nous faisons que +1, parce qu'on commence la boucle à 1.
-
-
-   const char MUR_HAUT = '-';
-   const char MUR_COTE = '|';
-
-   const unsigned largeurTerrainAffichee = largeur + 2;
-   const unsigned longeurTerrainAffichee = longeur + 1;
-   terrain.reserve(longeurTerrainAffichee);
-
-   const string ESPACE_LIBRE (largeur, VIDE);
-
-   string haut_bas(largeurTerrainAffichee, MUR_HAUT);
-   haut_bas.append(1, '\n');
-
-   string milieu(1, MUR_COTE);
-   milieu.append(ESPACE_LIBRE);
-   milieu.append(1, MUR_COTE);
-   milieu.append(1, '\n');
-
-   terrain.push_back(haut_bas);
-
-   for(unsigned i = 0; i < longeur; ++i){
-      terrain.push_back(milieu);
-   }
-   terrain.push_back(haut_bas);
-
-}
-
-void Terrain::mettreAJour(){
-   const string ESPACE_LIBRE (largeur, VIDE);
-
-   for(unsigned i = 1 ; i <= longeur; ++i){
-      terrain.at(i).replace(1, largeur , ESPACE_LIBRE);
-   }
-//   for(vector<Robot>::const_iterator it = robots.cbegin(); it != robots.cend(); ++it)
-   for(Robot monRobot : robots) {
-      if(monRobot.getEstEnVie()){
-         terrain.at(monRobot.getPosY()).replace(monRobot.getPosX(), 1, to_string(monRobot.getId()));
-      }
-   }
-}
 
 void Terrain::afficherTerrain() {
    #if defined(__linux__)  // Or #if __linux__
@@ -176,15 +131,64 @@ void Terrain::afficherTerrain() {
       system("clear");
    #endif
 
-   mettreAJour();
-//   for(vector<string>::const_iterator it = terrain.cbegin() ; it != terrain.cend(); ++it)
-   for(const string& it : terrain){
-      cout << it;
+   
+   const unsigned largeurTerrainAffichee = largeur + 2;
+   const unsigned largeurTerrainEspace   = largeur + 1;
+   const unsigned longeurTerrainAffichee = longeur + 1;
+
+   const string TITRE_DU_JEU = "Robot battle simulator©\n";
+
+   const char MUR_HAUT = '-';
+   const char MUR_COTE = '|';
+
+   string haut_bas(largeurTerrainAffichee, MUR_HAUT);
+   haut_bas.append(1, '\n');
+
+   vector<vector<unsigned>> robotQuiSontAY;
+
+   cout << TITRE_DU_JEU;
+
+   cout << haut_bas;
+
+   for(int i = 1 ; i <= longeur; ++i){
+
+      unsigned decalage = 0;
+
+      postionsRobotsAY( robotQuiSontAY, i );
+
+      cout << MUR_COTE;
+
+      for( vector<unsigned> j : robotQuiSontAY ){
+
+         cout << right << setw(j.at(0)-decalage) << j.at(1);
+
+         decalage = j.at(0);
+      }
+
+      cout << right << setw( largeurTerrainEspace - decalage) << MUR_COTE << endl;
    }
+
+   cout << haut_bas;
 
    cout << robotTue;
 
    this_thread::sleep_for(100ms);
+}
+void Terrain::postionsRobotsAY(vector<vector<unsigned>>& robotsAY, unsigned y){
+
+   robotsAY.clear();
+
+   robotsAY.reserve(nombreRobots);
+
+
+   for(Robot robot : robots){
+      if(robot.getPosY() == y && robot.getEstEnVie()){
+         robotsAY.push_back({robot.getPosX(), robot.getId()});
+      }
+   }
+
+   stable_sort(robotsAY.begin(), robotsAY.end(), trierIntVector);
+
 }
 
 void Terrain::initialiserRobot() {
@@ -211,7 +215,6 @@ unsigned Terrain::getLongeur() const {
 }
 // à revoir en foncteur (selon indication du prof)
 bool Terrain::existeDeja( unsigned x, unsigned y) {
-//   for(vector<Robot>::const_iterator it = robots.cbegin(); it != robots.cend(); ++it)
    for(Robot monRobot : robots) {
       if(monRobot.getPosX() == x and monRobot.getPosY() == y) {
          return true;
