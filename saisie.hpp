@@ -18,6 +18,15 @@
 
 #include <string>
 
+
+// nom         viderBuffer
+// but         vider les valeurs qui pourraient se trouver dans le buffer.
+//
+// param       aucun
+// return      aucun
+// exception   n/a
+void viderBuffer();
+
 int saisirIntervaleInt(int minInt, int maxInt, const std::string& message,
                        const std::string& message_erreur);
 

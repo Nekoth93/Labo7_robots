@@ -12,65 +12,193 @@
   ---------------------------------------------------------------------------
 */
 
+#include <random>
 #include <vector>
 #include <string>
 #include <iostream>
 #include <algorithm>
+#include <thread>
 #include "terrain.hpp"
 #include "saisie.hpp"
 #include "aleatoire.hpp"
 
 using namespace std;
 
-void Terrain::simulerCombat() {
+const char VIDE = ' ';
 
+bool Terrain::peutSeDeplacer(unsigned x, unsigned y) const {
+   
+   if(x > largeur || y > longeur || x == 0 || y == 0) {
+      return true;
+   }
+   return false;
+}
 
+void Terrain::eliminerRobot(unsigned x, unsigned y, unsigned id) {
+
+   for(Robot& robot : robots) {
+      if(robot.getPosX() == x && robot.getPosY() == y && robot.getEstEnVie()) {
+
+         robot.tuer();
+
+         robotTue += "Robot "s + to_string(id) + " a tué robot "s + to_string(robot
+            .getId()) + "\n";
+
+      }
+   }
 
 }
 
-void Terrain::afficherTerrain() {
+void Terrain::deplacerRobot(unsigned& x, unsigned& y, Robot& monRobot) {
+
+   enum direction{ UP, DOWN, RIGHT, LEFT };
+   do {
+            
+            switch(aleatoireEntreDeuxEntiersPositifs(0,3)){
+               case direction::UP :
+                  x =   monRobot.getPosX();
+                  y =   monRobot.getPosY()+1;
+                  break;
+               case direction::DOWN :
+                  x =   monRobot.getPosX();
+                  y =   monRobot.getPosY()-1;
+                  break;
+               case direction::RIGHT :
+                  x =   monRobot.getPosX()+1;
+                  y =   monRobot.getPosY();
+                  break;
+               case direction::LEFT :
+                  x =   monRobot.getPosX()-1;
+                  y =   monRobot.getPosY();
+            }
+
+   }while(peutSeDeplacer(x,y));
+
+   if(existeDeja(x, y)) {
+      eliminerRobot(x,y, monRobot.getId());
+   }
+   monRobot.deplacer(x,y);
+}
+unsigned Terrain::combatRobots() {
+
+
+   // Le générateur aléatoire ci-dessous est celui que notre IDE nous à suggérer.
+   // Il est possible d'en choisir un autre si on en préfère un en particulier.
+   shuffle(robots.begin(), robots.end(), std::mt19937(std::random_device()()));
+
+      unsigned nbrDeRobots = 0;
+
+      for(Robot& robot : robots) {
+
+         unsigned x;
+         unsigned y;
+
+         if(robot.getEstEnVie()) {
+            
+            deplacerRobot(x, y, robot);
+
+            ++nbrDeRobots;
+         }
+         
+      }
+
+      return nbrDeRobots;
+
+}
+void Terrain::simulerCombat() {
+
+   constructionTerrain();
+
+   unsigned nbrDeRobots;
+
+   do{
+      
+      nbrDeRobots = combatRobots();
+      afficherTerrain();
+
+   }while(nbrDeRobots != 1 && nbrDeRobots > 0);
+
+}
+
+void Terrain::constructionTerrain() {
+
+   // + 2, car on souhaite un terrain qui soit effectivement d'une largeur de 20, or
+   // les murs prennent chacun une place.
+   // Pour la longueur, nous faisons que +1, parce qu'on commence la boucle à 1.
+
+
    const char MUR_HAUT = '-';
    const char MUR_COTE = '|';
-   const char VIDE     = ' ';
 
-    // + 2, car on souhaite un terrain qui soit effectivement d'une largeur de 20, or
-    // les murs prennent chacun une place.
-    // Pour la longueur, nous faisons que +1, parce qu'on commence la boucle à 1.
    const unsigned largeurTerrainAffichee = largeur + 2;
    const unsigned longeurTerrainAffichee = longeur + 1;
+   terrain.reserve(longeurTerrainAffichee);
 
    const string ESPACE_LIBRE (largeur, VIDE);
 
-   string terrain (largeurTerrainAffichee, MUR_HAUT);
-   terrain.append("\n");
-   for(size_t i = 1; i <= longeurTerrainAffichee; ++i) {
-      terrain.append(1, MUR_COTE);
-      terrain.append(ESPACE_LIBRE);
-      terrain.append(1, MUR_COTE);
-      terrain.append("\n");
-   }
-   terrain.append(largeurTerrainAffichee, MUR_HAUT);
+   string haut_bas(largeurTerrainAffichee, MUR_HAUT);
+   haut_bas.append(1, '\n');
 
-   cout << terrain;
+   string milieu(1, MUR_COTE);
+   milieu.append(ESPACE_LIBRE);
+   milieu.append(1, MUR_COTE);
+   milieu.append(1, '\n');
+
+   terrain.push_back(haut_bas);
+
+   for(unsigned i = 0; i < longeur; ++i) {
+      terrain.push_back(milieu);
+   }
+   terrain.push_back(haut_bas);
 
 }
 
-vector<Robot> Terrain::initialiserRobot() {
-   vector<Robot> robots;
+void Terrain::mettreAJour() {
+   const string ESPACE_LIBRE (largeur, VIDE);
+
+   for(unsigned i = 1 ; i <= longeur; ++i) {
+      terrain.at(i).replace(1, largeur , ESPACE_LIBRE);
+   }
+
+   for(Robot monRobot : robots) {
+      if(monRobot.getEstEnVie()) {
+         terrain.at(monRobot.getPosY()).replace(monRobot.getPosX(), 1, to_string(monRobot.getId()));
+      }
+   }
+}
+
+void Terrain::afficherTerrain() {
+   #if defined(__linux__)  // Or #if __linux__
+      system("clear");
+   #elif _WIN32
+      system("CLS");
+   #else
+      system("clear");
+   #endif
+
+   mettreAJour();
+   for(const string& it : terrain) {
+      cout << it;
+   }
+
+   cout << robotTue;
+
+   this_thread::sleep_for(100ms);
+}
+
+void Terrain::initialiserRobot() {
    const int min = 1;
 
    unsigned x;
    unsigned y;
 
-   for (unsigned i = 0; i < Terrain::nombreRobots; ++i) {
+   for (unsigned i = 1; i <= Terrain::nombreRobots; ++i) {
       do {
          x= aleatoireEntreDeuxEntiersPositifs(min, getlargeur());
          y = aleatoireEntreDeuxEntiersPositifs(min, getLongeur());
-      }while(existeDeja(robots, x, y));
-      robots.emplace_back(x, y, i);
+      }while(existeDeja(x, y));
+      robots.emplace_back(x, y, i, true);
    }
-
-   return robots;
 }
 
 unsigned Terrain::getlargeur() const {
@@ -80,11 +208,9 @@ unsigned Terrain::getlargeur() const {
 unsigned Terrain::getLongeur() const {
    return longeur;
 }
-// à revoir en foncteur (selon indication du prof)
-bool Terrain::existeDeja(const vector<Robot>& robots, unsigned x, unsigned y) {
-   for(vector<Robot>::const_iterator it = robots.cbegin(); it != robots.cend(); ++it) {
-      Robot monRobot = *it;
 
+bool Terrain::existeDeja( unsigned x, unsigned y) {
+   for(Robot monRobot : robots) {
       if(monRobot.getPosX() == x and monRobot.getPosY() == y) {
          return true;
       }
