@@ -28,7 +28,7 @@ int saisirIntervaleInt(int minInt, int maxInt, const string& message, const stri
    int saisie;
    bool erreur;
 
-   //continue jusque que le condition soit remplies
+   //continue jusqu'à ce que la condition soit remplies
    do {
 
       // message et saisie

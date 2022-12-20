@@ -22,56 +22,49 @@ public:
    Robot(unsigned x, unsigned y,  const unsigned identifiant, bool vivant) : posX(x), posY(y), id(identifiant) , estEnVie(vivant){}
    Robot& operator=(const Robot& r);
 
-   // nom         deplacer
-   // but         permet le déplacement du robot
-   //
-   // param       x : un entier non signé. Représente la coordonnée x de la position du
-   //                 robot.
-   // param       y : en entier non signé. Représente la coordonnée y de la position du
-   //                 robot.
-   // param       implicitement un objet de la classe Robot.
-   // return      aucun
-   // exception   n/a
+   /**
+    * @name  deplacer
+    * @brief permet le déplacement du robot
+    * @param x un entier non signé. Représente la coordonnée x de la position du
+    *          robot.
+    * @param y un entier non signé. Représente la coordonnée y de la position du
+    *          robot.
+    */
    void deplacer(unsigned x, unsigned y);
 
-   // nom         getPosX
-   // but         Obtenir la valeur de posX
-   //
-   // param       implicitement un objet de la classe Robot.
-   // return      un entier non signé.
-   // exception   n/a
+   /**
+    * @name   getPosX
+    * @brief  Obtenir la valeur de posX
+    * @return la coordonnée x du robot
+    */
    unsigned getPosX() const;
 
-   // nom         getPosY
-   // but         Obtenir la valeur de posY
-   //
-   // param       implicitement un objet de la classe Robot.
-   // return      un entier non signé.
-   // exception   n/a
+   /**
+    * @name   getPosY
+    * @brief  Obtenir la valeur de posY
+    * @return la coordonnée y du robot
+    */
    unsigned getPosY() const;
 
-   // nom         getId
-   // but         Obtenir la valeur de Id
-   //
-   // param       implicitement un objet de la classe Robot.
-   // return      un entier non signé.
-   // exception   n/a
+   /**
+    * @name   getId
+    * @brief  Obtenir la valeur de Id
+    * @return l'id du robot
+    */
    unsigned getId() const;
 
-   // nom         getEstEnVie
-   // but         Obtenir l'état du robot (en vie ou mort).
-   //
-   // param       implicitement un objet de la classe Robot.
-   // return      un booléen.
-   // exception   n/a
+   /**
+    * @name   getEstEnVie
+    * @brief  Obtenir l'état du robot (en vie ou mort).
+    * @return l'état du robot sous forme de booléen.
+    */
    bool getEstEnVie() const;
 
-   // nom         tuer
-   // but         Permet de passer l'état estEnVie du robot de true à false.
-   //
-   // param       implicitement un objet de la classe Robot.
-   // return      aucun
-   // exception   n/a
+   /**
+    * @name tuer
+    * @brief Permet de passer l'état estEnVie du robot de true à false.
+    *        (tue un robot)
+    */
    void tuer();
 
 private:

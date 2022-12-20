@@ -18,15 +18,21 @@
 
 #include <string>
 
-
-// nom         viderBuffer
-// but         vider les valeurs qui pourraient se trouver dans le buffer.
-//
-// param       aucun
-// return      aucun
-// exception   n/a
+/**
+ * @name  viderBuffer
+ * @brief vide le buffer
+ */
 void viderBuffer();
 
+/**
+ * @name  saisirIntervaleInt
+ * @brief Permet de faire une saisie sécurisée d'un entier.
+ * @param minInt          valeur minimale acceptée
+ * @param maxInt          valeur maximale acceptée
+ * @param message         Un message qui explique les limites
+ * @param message_erreur  un message en cas de mauvaise saisie
+ * @return
+ */
 int saisirIntervaleInt(int minInt, int maxInt, const std::string& message,
                        const std::string& message_erreur);
 

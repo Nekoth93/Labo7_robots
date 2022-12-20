@@ -24,15 +24,12 @@ class Terrain {
 public:
    Terrain() : Terrain(20, 20, 6) {}
    Terrain(unsigned la, unsigned lo, unsigned nbrRobot) : largeur(la), longeur(lo),
-           nombreRobots(nbrRobot) { initialiserRobot();}
+           nombreRobots(nbrRobot) {}
 
-
-   // nom         simulerCombat
-   // but         Permet de démarrer le jeu.
-   //
-   // param       Implicitement un objet de la classe Terrain.
-   // return      aucun
-   // exception   n/a
+   /**
+    * @name simulerCombat
+    * @brief Permet de démarrer le jeu.
+    */
    void simulerCombat();
 
 
@@ -44,40 +41,83 @@ private:
    std::vector<std::string> terrain;
    std::string robotTue;
 
-   /// @brief affiche le terrain
+   /**
+    * @name  afficherTerrain
+    * @brief Permet d'afficher le terrain de combat, indique qui a tué qui et permet
+    *        d'avoir un délai entre chaque action des robots pour que l'on ait le
+    *        temps de voir ce qu'il se passe.
+    */
    void afficherTerrain();
-   /// @brief getter de la largeur
-   /// @return la largeur
+
+   /**
+    * @name   getlargeur
+    * @brief  Permet d'obtenir la valeur de la largeur du terrain.
+    * @return la largeur
+    */
    unsigned getlargeur() const;
-   /// @brief getter de la longeur
-   /// @return la longeur
+
+   /**
+    * @name   getLongeur
+    * @brief  Permet d'obtenir la valeur de la longueur du terrain.
+    * @return la longueur
+    */
    unsigned getLongeur() const;
-   /// @brief initialise les robots qui vont se combattre à mort
+
+   /**
+    * @name  initialiserRobot
+    * @brief initialise les robots qui vont se combattre à mort
+    */
    void initialiserRobot();
-   /// @brief vérifie si un robot ne se trouve pas à cet emplacement
-   /// @param x coordonnée x
-   /// @param y coordonnée y
-   /// @return si il y a un robot
+
+   /**
+    * @name   existeDeja
+    * @brief  vérifie si un robot ne se trouve pas à cet emplacement
+    * @param  x coordonnée x
+    * @param  y coordonnée y
+    * @return si il y a un robot
+    */
    bool existeDeja(unsigned x, unsigned y);
-   /// @brief vérifie si un robot peut se déplacer à cet endroit
-   /// @param x coordonnée x
-   /// @param y coordonnée y
-   /// @return s'il peut se déplacer
+
+   /**
+    * @name   peutSeDeplacer
+    * @brief  vérifie si un robot peut se déplacer à cet endroit
+    * @param  x coordonnée x
+    * @param  y coordonnée y
+    * @return un booléen
+    */
    bool peutSeDeplacer(unsigned x, unsigned y) const;
-   /// @brief tue un robot à un emplacement donné
-   /// @param x coordonnée x
-   /// @param y coordonnée y
-   /// @param id id du robot qui est le meurtrier
+
+   /**
+    * @name  eliminerRobot
+    * @brief tue un robot à un emplacement donné
+    * @param x coordonnée x
+    * @param y coordonnée y
+    * @param id id du robot qui est le meurtrier
+    */
    void eliminerRobot(unsigned x, unsigned y, unsigned id);
-   /// @brief fait un tour de combat de robot
-   /// @return le nombre de robot vivant
+
+   /**
+    * @name   combatRobots
+    * @brief  Permet aux robots de se combattre.
+    * @return le nombre de robot vivant
+    */
    unsigned combatRobots();
-   /// @brief déplace un robot de manière aléatoire au case qui sont proches de lui, si un robot se trouve sur cette case, il l'élimine
-   /// @param monRobot le robot à déplacer
+
+
+   /**
+    * @name  deplacerRobot
+    * @brief déplace  un robot de manière aléatoire au case qui sont proches de lui,
+    *                 si un robot se trouve sur cette case, il l'élimine
+    * @param monRobot le robot à déplacer
+    */
    void deplacerRobot(Robot& monRobot);
-   /// @brief modifie une vecteur avec les coordonnées et leurs ids de tous les robots à un y données
-   /// @param robotsAY le vecteur ou stocker les données
-   /// @param y la coordonnées y
+
+   /**
+    * @name  postionsRobotsAY
+    * @brief modifie une vecteur avec les coordonnées et leurs ids de tous les robots à un y données
+    * @param robotsAY le vecteur ou stocker les données
+    * @param y la coordonnées y
+    */
    void postionsRobotsAY(std::vector<std::vector<unsigned>>& robotsAY, unsigned y);
 
 };

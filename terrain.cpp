@@ -115,6 +115,7 @@ unsigned Terrain::combatRobots() {
 }
 void Terrain::simulerCombat() {
 
+   initialiserRobot();
    unsigned nbrDeRobotsVivants;
 
    do{
@@ -139,7 +140,6 @@ void Terrain::afficherTerrain() {
 
    const unsigned largeurTerrainAffichee = largeur + 2;
    const unsigned largeurTerrainEspace   = largeur + 1;
-   const unsigned longeurTerrainAffichee = longeur + 1;
 
    const string TITRE_DU_JEU = "Robot battle simulator©\n";
 
@@ -155,7 +155,7 @@ void Terrain::afficherTerrain() {
 
    cout << haut_bas;
 
-   for(int i = 1 ; i <= longeur; ++i){
+   for(unsigned i = 1 ; i <= longeur; ++i){
 
       unsigned decalage = 0;
 
@@ -163,14 +163,16 @@ void Terrain::afficherTerrain() {
 
       cout << MUR_COTE;
 
-      for( vector<unsigned> j : robotQuiSontAY ){
+      for( vector<unsigned> j : robotQuiSontAY ) {
+         const int LARGEUR = int( j.at(0)-decalage );
 
-         cout << right << setw( j.at(0)-decalage ) << j.at(1);
+         cout << right << setw( LARGEUR ) << j.at(1);
 
          decalage = j.at(0);
       }
+      const int LARGEUR = int( largeurTerrainEspace - decalage );
 
-      cout << right << setw( largeurTerrainEspace - decalage) << MUR_COTE << endl;
+      cout << right << setw( LARGEUR ) << MUR_COTE << endl;
    }
 
    cout << haut_bas;
@@ -186,7 +188,7 @@ void Terrain::postionsRobotsAY( vector<vector<unsigned>>& robotsAY, unsigned y )
    robotsAY.reserve(nombreRobots);
 
 
-   for( Robot robot : robots ){
+   for( Robot robot : robots ) {
       if( robot.getPosY() == y && robot.getEstEnVie() ){
 
          robotsAY.push_back({ robot.getPosX(), robot.getId() });
@@ -223,9 +225,9 @@ unsigned Terrain::getlargeur() const {
 unsigned Terrain::getLongeur() const {
    return longeur;
 }
-// à revoir en foncteur (selon indication du prof)
+
 bool Terrain::existeDeja( unsigned x, unsigned y) {
-//   for(vector<Robot>::const_iterator it = robots.cbegin(); it != robots.cend(); ++it)
+
    for(Robot monRobot : robots) {
       if(monRobot.getPosX() == x and monRobot.getPosY() == y) {
          return true;
