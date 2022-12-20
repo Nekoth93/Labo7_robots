@@ -160,7 +160,7 @@ void Terrain::afficherTerrain() {
 
       for( vector<unsigned> j : robotQuiSontAY ){
 
-         cout << right << setw(j.at(0)-decalage) << j.at(1);
+         cout << right << setw( j.at(0)-decalage ) << j.at(1);
 
          decalage = j.at(0);
       }
@@ -174,16 +174,18 @@ void Terrain::afficherTerrain() {
 
    this_thread::sleep_for(100ms);
 }
-void Terrain::postionsRobotsAY(vector<vector<unsigned>>& robotsAY, unsigned y){
+void Terrain::postionsRobotsAY( vector<vector<unsigned>>& robotsAY, unsigned y ){
 
    robotsAY.clear();
 
    robotsAY.reserve(nombreRobots);
 
 
-   for(Robot robot : robots){
-      if(robot.getPosY() == y && robot.getEstEnVie()){
-         robotsAY.push_back({robot.getPosX(), robot.getId()});
+   for( Robot robot : robots ){
+      if( robot.getPosY() == y && robot.getEstEnVie() ){
+
+         robotsAY.push_back({ robot.getPosX(), robot.getId() });
+
       }
    }
 
@@ -192,16 +194,19 @@ void Terrain::postionsRobotsAY(vector<vector<unsigned>>& robotsAY, unsigned y){
 }
 
 void Terrain::initialiserRobot() {
+
    const int min = 1;
 
    unsigned x;
    unsigned y;
 
-   for (unsigned i = 1; i <= Terrain::nombreRobots; ++i) {
+   for ( unsigned i = 1; i <= Terrain::nombreRobots; ++i ) {
       do {
-         x= aleatoireEntreDeuxEntiersPositifs(min, getlargeur());
+
+         x = aleatoireEntreDeuxEntiersPositifs(min, getlargeur());
          y = aleatoireEntreDeuxEntiersPositifs(min, getLongeur());
-      }while(existeDeja(x, y));
+
+      }while( existeDeja(x, y) );
       robots.emplace_back(x, y, i, true);
    }
 }
