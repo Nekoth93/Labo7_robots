@@ -60,11 +60,16 @@ int main() {
                                  
    const string MSG_ERR_ROBOT    = "Valeur invalide, veuillez recommencer"s;
 
-   const string MSG_FIN         = "Merci d'avoir utiliser notre programme.\n"s +
-                                  "Veuillez appuyer sur enter pour quitter."s;
-
+   const string MSG_DEBUT        = "Bienvenu dans Robot battle simulator© de la Green Katze Korporation™ !\n"s
+                                 + "Ici, vous pouvez faire combattre à mort des robots innocents de tous crimes, jusqu'à ce qu'il n'en reste plus qu'un !\n"s;
+   const string MSG_FIN         = "La Green Katze Korporation™ vous remercie d'avoir utilisé Robot battle simulator©.\n"s +
+                                  "Grâce à votre simulation, nous avons pu récolter de précieuses informations pour l'avenir de l'humanité.\n"s +
+                                  "Veuillez appuyer sur ENTER pour quitter."s;
+                                  
    //======================== Début du programme ===================================
 
+
+   cout << MSG_DEBUT;
 
    Terrain t1((unsigned)saisirIntervaleInt(MIN_TERRAIN, MAX_TERRAIN,
                                            MSG_LARG_TERRAIN, MSG_ERR_TAILLE),
