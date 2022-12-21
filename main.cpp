@@ -65,7 +65,7 @@ int main() {
    const string MSG_FIN         = "La Green Katze Korporation™ vous remercie d'avoir utilisé Robot battle simulator©.\n"s +
                                   "Grâce à votre simulation, nous avons pu récolter de précieuses informations pour l'avenir de l'humanité.\n"s +
                                   "Veuillez appuyer sur ENTER pour quitter."s;
-
+                                  
    //======================== Début du programme ===================================
 
 
